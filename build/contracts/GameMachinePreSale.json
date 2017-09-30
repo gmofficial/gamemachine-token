@@ -1,0 +1,221 @@
+{
+  "contract_name": "GameMachinePreSale",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "startDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "rate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "multisig",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "restricted",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "hardcap",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "createTokens",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "endDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "token",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "name": "_multisig",
+          "type": "address"
+        },
+        {
+          "name": "_startDate",
+          "type": "uint256"
+        },
+        {
+          "name": "_period",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b6040516080806105bc833981016040528080519190602001805191906020018051919060200180519150505b5b60008054600160a060020a03191633600160a060020a03161790555b60018054600160a060020a03808716600160a060020a0319928316179092556107d0600255600380549286169290911691909117905560058290556100af826201518083026401000000006104846100c982021704565b60065568d8d726b7177a8000006007555b505050506100e3565b6000828201838110156100d857fe5b8091505b5092915050565b6104ca806100f26000396000f300606060405236156100a15763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630b97bc8681146100ad5780632c4e722e146100d25780634783c35b146100f75780637072c6b1146101265780638da5cb5b14610155578063b071cbe614610184578063b4427263146100a1578063c24a0f8b146101b3578063f2fde38b146101d8578063fc0c546a146101f9575b5b6100aa610228565b5b005b34156100b857600080fd5b6100c061034c565b60405190815260200160405180910390f35b34156100dd57600080fd5b6100c0610352565b60405190815260200160405180910390f35b341561010257600080fd5b61010a610358565b604051600160a060020a03909116815260200160405180910390f35b341561013157600080fd5b61010a610367565b604051600160a060020a03909116815260200160405180910390f35b341561016057600080fd5b61010a610376565b604051600160a060020a03909116815260200160405180910390f35b341561018f57600080fd5b6100c0610385565b60405190815260200160405180910390f35b6100aa610228565b005b34156101be57600080fd5b6100c061038b565b60405190815260200160405180910390f35b34156101e357600080fd5b6100aa600160a060020a0360043516610391565b005b341561020457600080fd5b61010a61042a565b604051600160a060020a03909116815260200160405180910390f35b6005544211801561023a575060065442105b151561024557600080fd5b600754600354600160a060020a0316311061025f57600080fd5b600354600160a060020a03163480156108fc0290604051600060405180830381858888f19350505050151561029357600080fd5b600154600254600160a060020a03909116906340c10f199033906102d790670de0b6b3a7640000906102cb903463ffffffff61043916565b9063ffffffff61046816565b6040517c010000000000000000000000000000000000000000000000000000000063ffffffff8516028152600160a060020a0390921660048301526024820152604401600060405180830381600087803b151561033357600080fd5b6102c65a03f1151561034457600080fd5b5050505b5b5b565b60055481565b60025481565b600354600160a060020a031681565b600454600160a060020a031681565b600054600160a060020a031681565b60075481565b60065481565b60005433600160a060020a039081169116146103ac57600080fd5b600160a060020a03811615156103c157600080fd5b600054600160a060020a0380831691167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b50565b600154600160a060020a031681565b6000828202831580610455575082848281151561045257fe5b04145b151561045d57fe5b8091505b5092915050565b600080828481151561047657fe5b0490508091505b5092915050565b60008282018381101561045d57fe5b8091505b50929150505600a165627a7a72305820a4cd6d1c2c6d8eff4b16cc8b386cae3d57412f7e876c743d4cb3e3be742c43fe0029",
+  "networks": {
+    "1506763151911": {
+      "links": {},
+      "events": {},
+      "updated_at": 1506763234734
+    },
+    "1506763401582": {
+      "links": {},
+      "events": {},
+      "updated_at": 1506763415807
+    },
+    "1506763450526": {
+      "links": {},
+      "events": {},
+      "updated_at": 1506763464153
+    },
+    "1506763726186": {
+      "links": {},
+      "events": {},
+      "updated_at": 1506763749566
+    },
+    "1506770647083": {
+      "links": {},
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "updated_at": 1506770772626
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1506770772626
+}

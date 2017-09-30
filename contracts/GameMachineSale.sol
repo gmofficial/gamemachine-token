@@ -1,44 +1,42 @@
 pragma solidity ^0.4.11;
 
-contract Crowdsale {
+import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./GameMachineToken.sol";
+
+contract GameMachineSale is Ownable {
 
     using SafeMath for uint;
 
-    address owner;
-
     /* @var Escrow address to collect crowdsale funds in ether */
-    address multisig;
+    address public multisig;
 
     /* @var Address to collect percent of total GMEX supply for bounty program and team */
-    address restricted;
+    address public restricted;
 
     /* @var Percent of total GMEX supply for bounty program and team */
-    uint restrictedPercent;
+    uint public restrictedPercent;
 
     /* Hardcaps on pre-sale and sale */
-    uint presaleHardcap;
-    uint saleHardcap;
+    uint public hardcap;
 
-    uint saleRate;
-    uint preSaleRate;
+    /* Sale rate */
+    uint public rate;
 
-    uint preSaleStart;
-    uint preSalePeriod;
+    /* Sale start daytime */
+    uint256 public startDate;
 
-    uint saleStart;
-    uint salePeriod;
+    /* Sale period */
+    uint256 public endDate;
 
     /* Game Machine Exchange Token instance */
-    GameMachineExchangeToken public token = new GameMachineExchangeToken();
+    GameMachineToken public token;
 
     /*
      * Check, if pre-sale or sale is active now
      */
     modifier saleIsOn() {
-        require(
-            isPreSale() ||
-            isSale()
-        );
+        require( now > startDate && now < endDate);
         _;
     }
 
@@ -46,57 +44,34 @@ contract Crowdsale {
      * Check, is hardcap not achieved
      */
     modifier isUnderHardCap() {
-        if ( isPreSale() ) {
-            require(multisig.balance <= presaleHardcap);
-        } else if ( isSale() ) {
-            require(multisig.balance <= saleHardcap )
-        }
+        require(multisig.balance <= hardcap );
         _;
     }
 
     /*
      * Basic constructor for Crowdsale contract
      */
-    function Crowdsale(address _mulitsig, address _restricted, uint _preSaleStart, uint _preSalePeriod, uint _saleStart, uint _salePeriod) {
-        owner = msg.sender;
-        multisig = _mulitsig;
+    function GameMachineSale(address _token, address _multisig, address _restricted, uint256 _startDate, uint _period) {
+        token = GameMachineToken(_token);
+
+        multisig = _multisig;
         restricted = _restricted;
 
         /*
          * Percents from total GMEX supply to bounty and team.
          * After finishing crowdale transfer to restricted address.
          */
-        restrictedPercent = 20;
+        restrictedPercent = 40;
 
-        /*
-         * Pre-sale and sale starts dates and periods in days
-         */
-        preSaleStart = _preSaleStart;
-        preSalePeriod = _preSalePeriod * 1 days;
-
-        saleStart = _saleStart;
-        salePeriod = _salePeriod * 1 days;
+        startDate = _startDate;
+        endDate = _startDate + _period * 1 days;
 
         /*
          * GMEX's amount gived for 1 ether
          * on pre-sale and on sale
          */
-        preSaleRate = 1500;
-        saleRate = 1000;
-    }
-
-    /*
-     * Check pre-sale is active
-     */
-    function isPreSale() returns (bool) {
-        return (now > preSaleStart && now < preSaleStart + preSalePeriod);
-    }
-
-    /*
-     * Check sale is active
-     */
-    function isSale() returns (bool) {
-        return (now > saleStart && now < saleStart + salePeriod);
+        rate = 1000;
+        hardcap = 100000 * 1 ether;
     }
 
     /*
@@ -106,14 +81,14 @@ contract Crowdsale {
      * 2 day - 10% of adding tokens
      * 3 day - 5% of adding tokens
      */
-    function calculateBonus(uint tokensAmount) private returns (uint bonusAmount){
+    function calculateBonus(uint tokensAmount) private returns (uint){
         uint bonusAmount = 0;
 
-        if ( now > saleStart && now < saleStart + 1 days ) {
+        if ( now > startDate && now < startDate + 1 days ) {
             bonusAmount = tokensAmount.mul(15).div(100);
-        } else if ( now > saleStart + 1 days && now < saleStart + 2 days ) {
+        } else if ( now > startDate + 1 days && now < startDate + 2 days ) {
             bonusAmount = tokensAmount.mul(10).div(100);
-        } else if ( now > saleStart + 2 days && now < saleStart + 3 days ) {
+        } else if ( now > startDate + 2 days && now < startDate + 3 days ) {
             bonusAmount = tokensAmount.mul(5).div(100);
         }
 
@@ -129,11 +104,8 @@ contract Crowdsale {
         uint tokensAmount;
         uint bonusAmount;
 
-        if ( isPreSale() ) {
-            tokensAmount = preSaleRate.mul(msg.value).div(1 ether);
-        } else if ( isSale() ) {
-            tokensAmount = saleRate.mul(msg.value).div(1 ether);
-        }
+
+        tokensAmount = rate.mul(msg.value).div(1 ether);
 
         bonusAmount = calculateBonus(tokensAmount);
 

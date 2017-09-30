@@ -1,0 +1,101 @@
+var founder = accounts[0];
+
+var startSaleDate = 1506700000;
+var salePeriod = 21; //21 days
+
+var multisig = accounts[1];
+var restricted = accounts[2];
+
+var multisigStartBalance = web3.fromWei(web3.eth.getBalance(multisig), 'ether');
+var testingTransactionAmount = 1;
+
+it("try create and test", async function(done) {
+    var token = await GMEToken.new();
+
+    var crowdsale = await Crowdsale.new(token.address, multisig, restricted, startSaleDate, salePeriod);
+
+})
+
+
+it("Should verify start date", function(done) {
+    Crowdsale.deployed().then(function(instance) {
+        icoContract = instance;
+        return instance.saleStart.call();
+    }).then(function(date) {
+        assert.equal(date.toNumber(), startSaleDate, "Start Date should be equal to 1506700000");
+    }).then(done);
+});
+
+it("Should verify founders balance", function(done) {
+    GMEToken.deployed().then(function(instance) {
+        return instance.balanceOf.call(multisig);
+    }).then(function(balance) {
+        assert.equal(balance.toNumber(), 0, "Wrong multisig balance");
+    }).then(done);
+});
+
+it("Check balance on accounts[3]", function(done) {
+    Crowdsale.deployed().then(function(instance) {
+        icoContract = instance;
+        var acc = accounts[3];
+        return web3.eth.getBalance(acc)
+    }).then(function(balance) {
+        assert.equal(balance > 0, true, "Balance in eth more than 0");
+    }).then(done);
+});
+
+it("Try buy tokens from accounts[3]", function(done) {
+    Crowdsale.deployed().then(function(instance) {
+        return web3.eth.sendTransaction({
+            from : accounts[3],
+            to: instance.address,
+            value: web3.toWei(testingTransactionAmount, 'ether')
+        })
+    }).then(function(hash) {done();});
+});
+
+it("Check balance on multisig account", function(done) {
+    assert.equal(web3.fromWei(web3.eth.getBalance(multisig), 'ether').toNumber(), multisigStartBalance.add( testingTransactionAmount).toNumber(), "Balance hasnt change");
+    done();
+});
+
+it("Check balance in tokens on account[3]", function(done) {
+    Crowdsale.deployed().then(function(instance) {
+        return instance.token.call();
+    }).then(function(address) {
+        web3.
+        GMEToken(address).deployed().then(function(instance) {
+            var investor = accounts[3];
+
+            return instance.balanceOf(investor).then(function(balance) {
+                console.log("On investor account is " + balance + " gmex");
+                assert.equal(balance > 0, true, "Tokens on investor account exist");
+            }).then(done)
+        });
+    });
+});
+
+/*it("Check balance in tokens on account[3]", function(done) {
+    GMEToken.deployed().then(function(instance) {
+        var investor = accounts[3];
+
+        return instance.balanceOf(investor).then(function(balance) {
+            console.log("On investor account is " + balance + " gmex");
+            assert.equal(balance > 0, true, "Tokens on investor account exist");
+        }).then(done)
+    });
+});*/
+
+/*
+crowdsale = Crowdsale.deployed()
+token = GMEToken.deployed()
+web3.eth.getBalance(web3.eth.accounts[0])
+web3.eth.sendTransaction({from: web3.eth.accounts[3], to: crowdsale.address, value: web3.toWei(1, 'ether')});
+token.then(function(instance){ return instance.balanceOf(web3.eth.accounts[3]);});
+
+crowdsale.then(function(instance){ return instance.token; }).then(function(instance) {return instance.balanceOf(web3.eth.accounts[0]);});
+
+crowdsale.then(function(crowd) { web3.eth.sendTransaction({from: web3.eth.accounts[3], to: crowd.address, value: web3.toWei(1, 'ether')}); });
+
+
+*/
